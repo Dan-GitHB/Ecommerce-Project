@@ -1,0 +1,205 @@
+.review-product-parent {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 140px;
+}
+
+.product-name {
+  font-weight: 700;
+  font-size: 58px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  letter-spacing: 2px;
+}
+
+.product-description {
+  width: 500px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(69, 64, 64);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.price-buy-product {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  column-gap: 60px;
+}
+
+.price-product {
+  font-size: 28px;
+}
+
+.add-to-cart-product {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  background-color: rgb(37, 90, 37);
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+}
+
+.add-to-cart-product i {
+  padding-right: 10px;
+  color: beige;
+}
+
+.review-product-image {
+  background-color: rgb(255, 255, 255);
+  width: 600px;
+  height: 380px;
+  position: relative;
+  box-shadow: 8px 9px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-radius: 18px;
+}
+
+.image-product {
+  width: 85%;
+  margin-right: 30px;
+}
+
+/* Reviews Style Here */
+
+/*  */
+
+.parent-reviews {
+  padding-left: 3rem;
+  width: 100%;
+  padding-right: 3rem;
+}
+.review-header {
+  margin: 60px 0 20px 0px;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -1.5px;
+}
+
+.one-review {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: bisque;
+  max-width: 100%;
+}
+
+.add-review {
+  width: 100%;
+  position: relative;
+}
+
+.all-reviews {
+  width: 100%;
+  display: block;
+}
+
+.review-content {
+  border-radius: 10px;
+}
+.review-content::placeholder {
+  color: black;
+}
+
+.add-review-header {
+  font-size: 25px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-bottom: 8px;
+  margin-left: 10px;
+}
+
+.rate-review i {
+  color: green;
+  font-size: 22px;
+  margin-left: 10px;
+}
+
+.title-review {
+  display: block;
+  width: 60%;
+  height: auto;
+  margin: 10px 0 15px 10px;
+  padding: 0.6rem 0;
+  border: 3px solid rgb(107, 105, 105);
+  border-radius: 8px;
+}
+.title-review::placeholder {
+  color: black;
+}
+
+.review-text {
+  display: block;
+  width: 60%;
+  height: auto;
+  margin: 10px 0 15px 10px;
+  padding: 0.6rem 0;
+  border: 3px solid rgb(107, 105, 105);
+  border-radius: 8px;
+}
+
+.review-text::placeholder {
+  color: black;
+}
+
+.create-new-review {
+  background-color: rgb(19, 81, 19);
+  color: rgb(225, 225, 225);
+  padding: 0.6rem 1.2rem;
+  font-size: 18px;
+  border-radius: 18px;
+  margin: 8px 0px 30px 250px;
+}
+
+.all-review-header {
+  font-size: 25px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+  margin: 15px 0 37px 10px;
+  font-weight: 600;
+}
+
+.rate-date {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0 20px 0;
+}
+
+.rate-reviews i {
+  color: green;
+  font-size: 18px;
+}
+
+.date-review {
+  margin-right: 40px;
+  color: gray;
+  font-weight: 600;
+}
+
+.review-content {
+  max-width: 1000px;
+}
+
+.review-title {
+  font-size: 24px;
+  font-style: italic;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.message-review-product {
+  font-size: 20px;
+}
+
+hr {
+  border: 1px solid rgb(136, 132, 132);
+  width: 80%;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}

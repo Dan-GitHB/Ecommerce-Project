@@ -1,0 +1,75 @@
+.idk {
+  background-color: rgb(129, 129, 129);
+  height: 2px;
+  margin: 30px 0;
+}
+
+.wish-list-type-category {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 50px;
+  font-weight: 800;
+}
+
+.wish-list-parent {
+  padding: 3rem;
+}
+
+.wish-list-header {
+  font-size: 35px;
+  font-weight: 700;
+  margin-bottom: 150px;
+  text-align: center;
+}
+
+.wish-list-product {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.wish-list-product-info {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.wish-list-product-info i {
+  font-size: 25px;
+}
+
+img {
+  width: 150px;
+  box-shadow: none;
+}
+
+.wish-list-product-price {
+  margin-right: 140px;
+  display: flex;
+  column-gap: 10px;
+}
+.wish-list-product-price span {
+  text-decoration: line-through;
+}
+
+.wish-list-product-price p {
+  background-color: greenyellow;
+  font-weight: 600;
+}
+
+.wish-list-addtocart p {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.wish-list-addtocart button {
+  color: white;
+
+  background-color: rgb(26, 168, 92);
+  padding: 0.5rem 4rem;
+  border-radius: 100px;
+  font-weight: 700;
+  text-transform: capitalize;
+  margin-top: 9px;
+}

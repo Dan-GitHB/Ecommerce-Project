@@ -1,0 +1,24 @@
+.navbar-parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: rgb(37, 36, 36);
+  padding: 2rem;
+}
+
+.logo-navbar {
+  color: white;
+  font-size: 35px;
+}
+
+.navbar-components ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 35px;
+  color: white;
+}
+
+.navbar-components ul li {
+  font-size: 22px;
+}
