@@ -56,7 +56,10 @@ const page = ({ params }) => {
 
       alert('The review is posting right now')
     } catch (error) {
-      console.log(error)
+      alert(
+        'Please make sure that you have an account and you are logged in before you try to post a review'
+      )
+      window.location = 'http://localhost:3000/Auth/LogIn'
     }
   }
 

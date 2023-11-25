@@ -4,16 +4,14 @@ import { useContext } from 'react'
 import { PropsContext } from '@/app/actions/consumProps'
 
 const WishList = () => {
-  const { product, setProduct } = useContext(PropsContext)
+  const { wishproduct, setWishProduct } = useContext(PropsContext)
 
   const removeProductFromWishList = (productId) => {
-    const updatedProducts = product.filter(
-      (item) => item && item._id === productId
+    const updatedProducts = wishproduct.filter(
+      (item) => item && item._id !== productId
     )
-    setProduct(updatedProducts)
+    return setWishProduct(updatedProducts)
   }
-
-  console.log(product)
 
   return (
     <div className='wish-list-parent'>
@@ -27,8 +25,8 @@ const WishList = () => {
         </div>
         <hr className='idk' />
 
-        {product && product.length > 0
-          ? product.map((item) =>
+        {wishproduct && wishproduct.length > 0
+          ? wishproduct.map((item) =>
               item !== undefined ? (
                 <div className='wish-list-product-main' key={item._id}>
                   <div className='wish-list-product'>
@@ -48,7 +46,7 @@ const WishList = () => {
                       <p>In Stock</p>
                     </div>
                     <div className='wish-list-addtocart'>
-                      <p>Added on: {item.addedDate}</p>
+                      <p>Added on: {item._id}</p>
                       <button>Add to Cart</button>
                     </div>
                   </div>

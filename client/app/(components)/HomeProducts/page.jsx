@@ -9,11 +9,9 @@ import Link from 'next/link'
 import axios from 'axios'
 
 const HomeProducts = () => {
-  const [products, setProducts] = useState([])
-  const [nameProduct, setNameProduct] = useState('')
-  const [inWishList, setInWishList] = useState(false)
-
-  const { product, setProduct } = useContext(PropsContext)
+  const { products, setProducts } = useContext(PropsContext) //Toate produsele din home Page
+  const { wishproduct, setWishProduct } = useContext(PropsContext) //Produsele ce le adaugam in Wish List
+  const { cartProducts, setCartProducts } = useContext(PropsContext) // Produsele ce le adaugam in Cart Page
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,31 +26,49 @@ const HomeProducts = () => {
     fetchData()
   }, [])
 
-  const getNameProduct = async (selectedProduct) => {
-    setNameProduct(selectedProduct)
-
+  const addProductsToWishList = async (selectedProduct) => {
     try {
       const response = await axios.post(`http://localhost:8000/wishlist`, {
-        nameProduct,
+        nameProduct: selectedProduct.title,
       })
       const data = response.data.product[0]
 
-      const updateProducts = products.map((product) => {
-        if (product._id === selectedProduct._id) {
-          return {
-            ...product,
-            inWishList: !product.inWishList,
+      if (selectedProduct !== '') {
+        const updateProducts = products.map((product) => {
+          if (product._id === selectedProduct._id) {
+            return {
+              ...product,
+              inWishList: true,
+            }
           }
-        }
 
-        return product
-      })
+          return product
+        })
+        setProducts(updateProducts)
+      }
 
-      setProduct((prevProducts) => [...prevProducts, data])
-
-      setProducts(updateProducts)
+      setWishProduct((prevProducts) => [...prevProducts, data])
     } catch (error) {
-      console.error(error)
+      alert('Something went wrong. Make sure you are logged in')
+    }
+  }
+
+  const addProductsToCart = async (selectedProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/products`,
+
+        {
+          nameProduct: selectedProduct.title,
+        }
+      )
+
+      const data = response.data.product[0]
+
+      setCartProducts((prevCartProducts) => [...prevCartProducts, data])
+    } catch (error) {
+      console.log(error)
+      alert('Something went wrong. Make sure you are logged in!')
     }
   }
 
@@ -69,7 +85,13 @@ const HomeProducts = () => {
                       product.inWishList ? 'fa-solid' : 'fa-regular'
                     } fa-heart`}
                     onClick={() => {
-                      getNameProduct(product.title)
+                      if (product.inWishList === true) {
+                        alert(
+                          'This product is already on your wish list. Go check it out!'
+                        )
+                        return null
+                      }
+                      addProductsToWishList(product)
                     }}
                   ></i>
                 </span>
@@ -85,7 +107,14 @@ const HomeProducts = () => {
 
               <div className='price-buy'>
                 <strong className='price'>${product.price}</strong>
-                <button className='add-to-cart'>Add to Cart</button>
+                <button
+                  className='add-to-cart'
+                  onClick={() => {
+                    addProductsToCart(product)
+                  }}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           )

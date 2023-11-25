@@ -37,6 +37,7 @@
 .cart-product-header p {
   color: red;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .product-cart {

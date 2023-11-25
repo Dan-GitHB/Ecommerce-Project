@@ -19,8 +19,8 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 320px;
-  margin-left: 950px;
+  margin-top: 280px;
+  margin-left: 1050px;
   width: 500px;
   height: auto;
   padding: 2rem;
@@ -80,8 +80,8 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 400px;
-  margin-left: 950px;
+  margin-top: 280px;
+  margin-left: 1050px;
   width: 500px;
   height: auto;
   padding: 2.5rem;
@@ -113,15 +113,28 @@
 .error-display {
   display: flex;
   justify-content: center;
-  margin-top: 80px;
-  margin-bottom: -80px;
+  margin-top: 100px;
+  margin-bottom: -150px;
 }
 
 .error-header {
-  font-size: 24px;
-  color: rgb(2, 1, 0);
+  font-size: 23px;
+  color: rgb(201, 23, 32);
   font-weight: 600;
-  border: 2px solid red;
+  padding: 0.4rem;
+}
+
+.success-display {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+  margin-bottom: -150px;
+}
+
+.success-header {
+  font-size: 23px;
+  color: rgb(103, 167, 7);
+  font-weight: 600;
   padding: 0.4rem;
 }
 
