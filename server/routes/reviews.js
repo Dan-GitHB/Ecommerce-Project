@@ -2,6 +2,7 @@ import express, { Router } from 'express'
 import { AllProducts } from '../models/AllProducts.js'
 import { AllReviews } from '../models/Reviews.js'
 import { ObjectId } from 'mongodb'
+import { verifyToken } from './authLogic.js'
 
 const router = express.Router()
 
@@ -21,7 +22,7 @@ router.get('/:id', async (req, res) => {
   } catch (error) {}
 })
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', verifyToken, async (req, res) => {
   const id = req.params.id
   const productt = await AllProducts.findById(id)
 

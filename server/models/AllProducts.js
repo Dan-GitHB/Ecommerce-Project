@@ -11,7 +11,7 @@ const ProductSchema = mongoose.Schema({
     require: true,
   },
 
-  priece: {
+  price: {
     type: Number,
     require: true,
   },
@@ -26,6 +26,13 @@ const ProductSchema = mongoose.Schema({
 
   productId: {
     type: mongoose.Schema.Types.ObjectId,
+  },
+
+  typeProduct: {
+    type: String,
+  },
+  pieces: {
+    type: Number,
   },
 })
 
