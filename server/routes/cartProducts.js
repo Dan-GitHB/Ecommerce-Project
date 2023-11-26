@@ -87,7 +87,7 @@ router.patch('/decrease-pieces', async (req, res) => {
   }
 })
 
-router.post('/create-checkout-session', async (req, res) => {
+router.post('/create-checkout-session', verifyToken, async (req, res) => {
   const { cartProducts } = req.body
 
   try {

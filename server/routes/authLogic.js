@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { json } from 'express'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -11,42 +11,40 @@ router.post('/signup', async (req, res) => {
 
   try {
     let secretKey = 'AiciDauUnNumeDeSecretKeyCareEsteDoarUnTestAcum'
-    if (!(name, email, password, confirmPassword)) {
+
+    if (!(name, email, password, confirmPassword))
       return res
         .status(400)
         .json({ status: 'error', message: 'Please fill all the fields ' })
-    }
 
-    const userAlreadyExist = await Users.findOne({
-      $or: [{ email: email }, { name: name }],
-    })
+    if (name.length < 3)
+      return res
+        .status(400)
+        .json({ message: 'The name must to contain atleast 3 letters' })
 
     const nameAlreadyExist = await Users.findOne({ name: name })
     const emailAlreadyExist = await Users.findOne({ email: email })
 
-    if (emailAlreadyExist) {
+    if (emailAlreadyExist)
       return res.status(409).json({
         status: 'error',
         message:
           'The User already exist with this email . Please go to login page',
       })
-    }
 
-    if (nameAlreadyExist) {
+    if (nameAlreadyExist)
       return res.status(409).json({
         status: 'error',
         message:
           'The User already exist with this name . Please go to login page',
       })
-    }
 
-    if (confirmPassword !== password) {
+    if (confirmPassword !== password)
       return res.status(400).json({
         status: 'error',
         message:
           'Please be sure that password and confirmPassword are the same',
       })
-    }
 
     const encryptPassword = await bcrypt.hash(password, 10)
     const encryptConfirmPassword = await bcrypt.hash(password, 10)
@@ -84,19 +82,17 @@ router.post('/login', async (req, res) => {
 
     const user = await Users.findOne({ email: email })
 
-    if (!user) {
+    if (!user)
       return res.status(401).json({
         message: 'The email or password is not correct. Please try once again',
       })
-    }
 
     const checkPassword = await bcrypt.compare(password, user.password)
 
-    if (!checkPassword) {
+    if (!checkPassword)
       return res.status(401).json({
         message: 'The email or password is not correct. Please try once again',
       })
-    }
 
     const payloadToken = {
       userId: user._id,
@@ -118,7 +114,10 @@ router.post('/login', async (req, res) => {
 })
 
 export function verifyToken(req, res, next) {
-  const token = req.headers.authorization.split(' ')[1]
+  let token = ''
+  if (req.headers.authorization) {
+    token = req.headers.authorization.split(' ')[1]
+  }
   let secretKey = 'AiciDauUnNumeDeSecretKeyCareEsteDoarUnTestAcum'
 
   console.log(token)
