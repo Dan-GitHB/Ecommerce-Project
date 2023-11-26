@@ -4,7 +4,7 @@ import { getAllProducts } from '@/app/actions/getAllProductsFunc'
 import { getProductReview } from '@/app/actions/reviewProductFunc'
 import { PropsContext } from '@/app/actions/consumProps'
 
-import Style from './HomeProducts.css'
+import styles from '../../../styles/HomeProducts.css'
 import Link from 'next/link'
 import axios from 'axios'
 
@@ -12,6 +12,7 @@ const HomeProducts = () => {
   const { products, setProducts } = useContext(PropsContext) //Toate produsele din home Page
   const { wishproduct, setWishProduct } = useContext(PropsContext) //Produsele ce le adaugam in Wish List
   const { cartProducts, setCartProducts } = useContext(PropsContext) // Produsele ce le adaugam in Cart Page
+  const [storedToken, setStoredToken] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +26,10 @@ const HomeProducts = () => {
 
     fetchData()
   }, [])
+
+  useEffect(() => {
+    setStoredToken(localStorage.getItem('token'))
+  }, [storedToken])
 
   const addProductsToWishList = async (selectedProduct) => {
     try {
@@ -72,6 +77,10 @@ const HomeProducts = () => {
     }
   }
 
+  if (storedToken) {
+    axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
+  }
+
   return (
     <div className='home-parent'>
       <div className='products-parent'>
@@ -83,7 +92,7 @@ const HomeProducts = () => {
                   <i
                     className={`${
                       product.inWishList ? 'fa-solid' : 'fa-regular'
-                    } fa-heart`}
+                    } fa-heart i`}
                     onClick={() => {
                       if (product.inWishList === true) {
                         alert(

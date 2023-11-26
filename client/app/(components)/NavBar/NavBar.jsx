@@ -1,24 +1,19 @@
 'use client'
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import Style from './NavBar.css'
 import ecommerceLogo from '../../../public/images/logo-ecommerce.png'
+
 import Link from 'next/link'
 
-function checkIfUserExist() {
-  let existUser = false
-  let userName = undefined
-
-  if (localStorage.getItem('userAccount') !== null) {
-    existUser = true
-    userName =
-      JSON.parse(localStorage.getItem('userAccount'))?.name ||
-      'Numele inca nu exista'
-  }
-  return { existUser, userName }
-}
-
 const NavBar = () => {
-  const { existUser, userName } = checkIfUserExist()
+  const [existUser, setExistUser] = useState([])
+  const [userName, setUserName] = useState('')
+
+  useEffect(() => {
+    setExistUser(localStorage.getItem('userAccount'))
+    setUserName(JSON.parse(localStorage.getItem('userAccount'))?.name || '')
+  }, [existUser])
+
   const [showMenu, setShowMenu] = useState(false)
 
   const handleMouseOver = () => {
@@ -31,6 +26,8 @@ const NavBar = () => {
 
   const logOutUser = () => {
     localStorage.removeItem('userAccount')
+    localStorage.removeItem('token')
+
     window.location.href = '/'
   }
 
@@ -38,7 +35,7 @@ const NavBar = () => {
     <div className='navbar-parent'>
       <div className='logo-navbar'>
         <h3>
-          E-commerce <i className='fa-solid fa-money-check-dollar'></i>{' '}
+          E-commerce <i className='fa-solid fa-money-check-dollar'></i>
         </h3>
       </div>
 
@@ -58,7 +55,7 @@ const NavBar = () => {
 
           <Link href={'/Cart'}>
             <li>
-              <span className='cart'>Cart</span>
+              Cart
               <i className='fa-solid fa-cart-shopping'></i>
             </li>
           </Link>
@@ -68,7 +65,7 @@ const NavBar = () => {
       <div className='auth-components'>
         {existUser ? (
           <ul>
-            <li>{userName.split(' ')[0]}</li>
+            <li>{userName}</li>
             <li
               className='img-user'
               onMouseOver={handleMouseOver}

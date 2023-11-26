@@ -1,16 +1,51 @@
 'use client'
-import Style from './WishList.css'
-import { useContext } from 'react'
+import Style from '../../../styles/WishList.css'
+import axios from 'axios'
+import { useContext, useState, useEffect } from 'react'
 import { PropsContext } from '@/app/actions/consumProps'
 
 const WishList = () => {
   const { wishproduct, setWishProduct } = useContext(PropsContext)
+  const { cartProducts, setCartProducts } = useContext(PropsContext) // Produsele ce le adaugam in Cart Page
+  const [storedToken, setStoredToken] = useState('')
 
+  useEffect(() => {
+    setStoredToken(localStorage.getItem('token'))
+  }, [storedToken])
+
+  //
   const removeProductFromWishList = (productId) => {
     const updatedProducts = wishproduct.filter(
       (item) => item && item._id !== productId
     )
     return setWishProduct(updatedProducts)
+  }
+
+  //
+
+  const addProductsToCart = async (selectedProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/products`,
+
+        {
+          nameProduct: selectedProduct.title,
+        }
+      )
+
+      const data = response.data.product[0]
+
+      setCartProducts((prevCartProducts) => [...prevCartProducts, data])
+    } catch (error) {
+      console.log(error)
+      alert('Something went wrong. Make sure you are logged in!')
+    }
+  }
+
+  // Setam tokenul in header, pentru a arata ca suntem logati in cont
+
+  if (storedToken) {
+    axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
   }
 
   return (
@@ -47,7 +82,9 @@ const WishList = () => {
                     </div>
                     <div className='wish-list-addtocart'>
                       <p>Added on: {item._id}</p>
-                      <button>Add to Cart</button>
+                      <button onClick={() => addProductsToCart(item)}>
+                        Add to Cart
+                      </button>
                     </div>
                   </div>
                   <hr className='idk' />

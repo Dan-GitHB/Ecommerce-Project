@@ -1,16 +1,21 @@
 'use client'
-import Style from '../ProductReview.css'
+import Style from '../../../../styles/ProductReview.css'
 import { getProductReview } from '@/app/actions/reviewProductFunc'
+import { PropsContext } from '@/app/actions/consumProps'
 import axios from 'axios'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 
 const page = ({ params }) => {
+  const { cartProducts, setCartProducts } = useContext(PropsContext)
+
   const [product, setProduct] = useState('')
   const [reviews, setReviews] = useState([])
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [rating, setRating] = useState(0)
+
+  const [storedToken, setStoredToken] = useState('')
 
   const id = params.id
 
@@ -27,13 +32,17 @@ const page = ({ params }) => {
 
     const getAllReviews = async () => {
       const response = await axios.get(`http://localhost:8000/reviews/${id}`)
-      const reviewTitles = response.data.review.map((review) => review.title)
+      // const reviewTitles = response.data.review.map((review) => review.title)
       setReviews(response.data.review)
     }
 
     reviewProduct()
     getAllReviews()
   }, [])
+
+  useEffect(() => {
+    setStoredToken(localStorage.getItem('token'))
+  }, [storedToken])
 
   const titleValue = () => {
     event.preventDefault()
@@ -63,6 +72,29 @@ const page = ({ params }) => {
     }
   }
 
+  const addProductsToCart = async (selectedProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/products`,
+
+        {
+          nameProduct: selectedProduct.title,
+        }
+      )
+
+      const data = response.data.product[0]
+
+      setCartProducts((prevCartProducts) => [...prevCartProducts, data])
+    } catch (error) {
+      console.log(error)
+      alert('Something went wrong. Make sure you are logged in!')
+    }
+  }
+
+  if (storedToken) {
+    axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
+  }
+
   // JSX CODE HERE:
   return (
     <>
@@ -74,7 +106,10 @@ const page = ({ params }) => {
 
           <span className='price-buy-product'>
             <strong className='price-product'>${product.price}</strong>
-            <button className='add-to-cart-product'>
+            <button
+              className='add-to-cart-product'
+              onClick={() => addProductsToCart(product)}
+            >
               <i className='fa-solid fa-cart-shopping'></i>
               Add to Cart
             </button>
@@ -148,7 +183,7 @@ const page = ({ params }) => {
                     })}
                   </span>
 
-                  <span className='date-review'>2023-04-06:19:28:01</span>
+                  {/* <span className='date-review'>2023-04-06:19:28:01</span> */}
                 </div>
 
                 <div className='review-content'>

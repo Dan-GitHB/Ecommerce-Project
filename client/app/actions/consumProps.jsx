@@ -8,6 +8,7 @@ export default function PropsProvider({ children }) {
   const [products, setProducts] = useState([])
   const [wishproduct, setWishProduct] = useState([])
   const [cartProducts, setCartProducts] = useState([])
+
   return (
     <PropsContext.Provider
       value={{

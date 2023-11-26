@@ -52,14 +52,14 @@
 }
 
 .user-menu {
-  display: none;
+  /* display: none; */
   position: absolute;
   left: -20px;
   /* margin-top: 3px; */
   padding: 3px 7px;
   border-radius: 5px;
   background-color: antiquewhite;
-  transition: opacity 0.9s ease-in-out;
+  transition: 3s ease-in-out;
 }
 
 .user-menu button {

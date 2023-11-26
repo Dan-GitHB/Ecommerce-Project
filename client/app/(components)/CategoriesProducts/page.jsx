@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { getAllProducts } from '@/app/actions/getAllProductsFunc'
 import axios from 'axios'
-import Style from './Categories.css'
+import Style from '../../../styles/Categories.css'
 
 const page = () => {
   const [prods, setProds] = useState([])

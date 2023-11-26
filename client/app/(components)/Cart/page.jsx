@@ -2,12 +2,14 @@
 
 import { useContext, useState, useEffect } from 'react'
 import { PropsContext } from '@/app/actions/consumProps'
-import Style from './Cart.css'
+import Style from '../../../styles/Cart.css'
 import axios from 'axios'
 
 const Page = () => {
   const { cartProducts, setCartProducts } = useContext(PropsContext)
   const [totalPrice, setTotalPrice] = useState(0)
+
+  const [storedToken, setStoredToken] = useState('')
 
   useEffect(() => {
     // Calculul totalului de prețuri când coșul de cumpărături se schimbă
@@ -21,6 +23,10 @@ const Page = () => {
 
     calculateTotalPrice()
   }, [cartProducts])
+
+  useEffect(() => {
+    setStoredToken(localStorage.getItem('token'))
+  }, [storedToken])
 
   // Adaugam noi bucati pentru un produs
   const addProductPieces = async (productId) => {
@@ -92,6 +98,13 @@ const Page = () => {
 
   const handleCheckout = async () => {
     try {
+      if (cartProducts.length === 0) {
+        alert(
+          'You cant go to checkout page before you add some products into the cart'
+        )
+        return
+      }
+
       const response = await axios.post(
         'http://localhost:8000/cart/create-checkout-session',
         {
@@ -105,7 +118,10 @@ const Page = () => {
     }
   }
 
-  console.log(cartProducts)
+  if (storedToken) {
+    axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
+  }
+
   return (
     <>
       <h1 className='cart-header'>Your Cart Items</h1>

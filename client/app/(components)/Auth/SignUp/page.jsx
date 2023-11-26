@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import Style from '../Auth.css'
+import Style from '../../../../styles/Auth.css'
 import axios from 'axios'
 
 const SignUp = () => {
@@ -8,6 +8,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+
   const [errorBoolean, setErrorBoolean] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [successBoolean, setSuccessBoolean] = useState(false)

@@ -1,16 +1,22 @@
 'use client'
 import { useState, useEffect } from 'react'
-import Style from '../Auth.css'
+import Style from '../../../../styles/Auth.css'
 import axios from 'axios'
 const LogIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [token, setToken] = useState('')
+  const [storedToken, setStoredToken] = useState('')
   const [userAccount, setUserAccount] = useState([])
 
   const [errorBoolean, setErrorBoolean] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [successBoolean, setSuccessBoolean] = useState(false)
+  const [successMsg, setSuccessMsg] = useState('')
+
+  useEffect(() => {
+    setStoredToken(localStorage.getItem('token'))
+  }, [storedToken])
 
   const handleEmail = (event) => {
     setEmail(event.target.value)
@@ -33,21 +39,25 @@ const LogIn = () => {
         }
       )
 
+      localStorage.setItem('userAccount', JSON.stringify(response.data.user))
       localStorage.setItem('token', response.data.token)
 
-      localStorage.setItem('userAccount', JSON.stringify(response.data.user))
-
-      setToken(response.data.token)
       setUserAccount(response.data.user)
-      window.location.href = '/'
+      setErrorBoolean(false)
+      setSuccessBoolean(true)
+      setSuccessMsg('You logged in successfully')
+
+      setTimeout(() => {
+        window.location.href = '/'
+      }, 1500)
     } catch (error) {
       setErrorBoolean(true)
       setErrorMsg(error.response.data.message)
     }
   }
 
-  if (token !== undefined && token !== '' && token !== null) {
-    axios.defaults.headers.post['Authorization'] = `Bearer ${token}`
+  if (storedToken) {
+    axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
   }
 
   return (
@@ -58,6 +68,13 @@ const LogIn = () => {
             <p className='error-header'>{errorMsg}</p>
           </div>
         )}
+
+        {successBoolean && (
+          <div className='success-display'>
+            <p className='success-header'>{successMsg}</p>
+          </div>
+        )}
+
         <form
           className='form-log-in'
           onSubmit={() => {
