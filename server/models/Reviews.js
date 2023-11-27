@@ -14,10 +14,15 @@ const ReviewSchema = mongoose.Schema({
     type: Number,
     require: true,
   },
+  nameUser: {
+    type: String,
+    require: true,
+  },
   review: {
     type: String,
     default: 'review',
   },
+
   product: {
     type: mongoose.Schema.Types.ObjectId,
   },

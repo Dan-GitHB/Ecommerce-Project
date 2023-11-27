@@ -1,15 +1,15 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import stripe from 'stripe'
+import dotenv from 'dotenv'
 import { verifyToken } from './authLogic.js'
 import { AllProducts } from '../models/AllProducts.js'
 
 const app = express()
 const router = express.Router()
+dotenv.config()
 
-const stripeSecretKey =
-  'sk_test_51OEFugGk7gyLcRzVk8betvpIH5RKJ9PA9w3tYoextYq3LY4xSfRSaJORSSwZWsjMbbMlprvZe53OCT8kzHZTCa7N00mcHTOQrK'
-
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripeIdk = stripe(stripeSecretKey)
 
 router.post('/', async (req, res) => {

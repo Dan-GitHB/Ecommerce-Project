@@ -26,7 +26,7 @@ router.post('/:id', verifyToken, async (req, res) => {
   const id = req.params.id
   const productt = await AllProducts.findById(id)
 
-  const { title, content, rating } = req.body
+  const { title, content, rating, nameUser } = req.body
 
   if (title === '' || content === '' || rating < 1) {
     return res.status(500).json({ message: 'All the fields are required' })
@@ -36,6 +36,7 @@ router.post('/:id', verifyToken, async (req, res) => {
     title,
     content,
     rating,
+    nameUser,
     product: productt._id,
   })
 

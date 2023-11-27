@@ -6,19 +6,6 @@ import { verifyToken } from './authLogic.js'
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  try {
-    const product = await AllProducts.find({ title: 'Mackbook 14 Pro' })
-
-    res.json({
-      message: 'Merge',
-      data: product,
-    })
-  } catch (error) {
-    console.log(error)
-  }
-})
-
 // Le adaugam la wishList page
 router.post('/', verifyToken, async (req, res) => {
   const nameProduct = req.body.nameProduct

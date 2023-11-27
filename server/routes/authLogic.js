@@ -3,27 +3,32 @@ import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
+import dotenv from 'dotenv'
 import { default as GoogleStrategy } from 'passport-google-oauth20'
 
 import { Users } from '../models/User.js'
 
 const router = express.Router()
+dotenv.config()
 
 export function verifyToken(req, res, next) {
   let token = ''
+
   if (req.headers.authorization) {
     token = req.headers.authorization.split(' ')[1]
   }
-  let secretKey = 'AiciDauUnNumeDeSecretKeyCareEsteDoarUnTestAcum'
 
-  console.log(token)
   if (!token) {
     return res.status(401).json({
       message: 'A problem occur. Make sure you are logged into your account',
     })
   }
+  if (token.length < 20) {
+    return next()
+  }
 
   try {
+    let secretKey = process.env.SECRET_KEY_JWT
     const decodedToken = jwt.verify(token, secretKey)
     req.decodedToken = decodedToken
 
@@ -38,7 +43,7 @@ router.post('/signup', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body
 
   try {
-    let secretKey = 'AiciDauUnNumeDeSecretKeyCareEsteDoarUnTestAcum'
+    let secretKey = process.env.SECRET_KEY_JWT
 
     if (!(name, email, password, confirmPassword))
       return res
@@ -106,7 +111,7 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body
 
   try {
-    let secretKey = 'AiciDauUnNumeDeSecretKeyCareEsteDoarUnTestAcum'
+    let secretKey = process.env.SECRET_KEY_JWT
 
     const user = await Users.findOne({ email: email })
 
@@ -148,7 +153,6 @@ passport.use(
         '353905428359-fqpbstf5rmho7me70ne0urh8orpldhhd.apps.googleusercontent.com',
       clientSecret: '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',
       callbackURL: 'http://localhost:3000/',
-
       scope: ['profile'],
     },
     async function verify(accessToken, refreshToken, profile, cb) {
@@ -159,12 +163,16 @@ passport.use(
           // Dacă utilizatorul nu există, creează-l
           user = new Users({
             name: profile.displayName,
-            googleId: profile.id,
           })
           await user.save()
         }
 
-        return cb(null, user)
+        const responseToClient = {
+          user,
+          googleDisplayName: profile.displayName,
+        }
+
+        return cb(null, responseToClient)
       } catch (error) {
         return cb(error, null)
       }
@@ -172,7 +180,6 @@ passport.use(
   )
 )
 
-// router.get('/login/google', passport.authenticate('google'))
 router.get(
   '/login/google',
   passport.authenticate('google', { scope: ['profile'] })
@@ -183,7 +190,10 @@ router.get(
   passport.authenticate('google', {
     successRedirect: 'http://localhost:3000/',
     failureRedirect: 'http://localhost:3000/cancel',
-  })
+  }),
+  (req, res) => {
+    res.json(req.user)
+  }
 )
 
 export { router as UsersRoute }

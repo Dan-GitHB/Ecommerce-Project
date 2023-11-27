@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
 import { ProductsRoute } from './routes/products.js'
 import { ReviewRoute } from './routes/reviews.js'
 import { WishListRoute } from './routes/wishList.js'
@@ -10,12 +11,19 @@ import { UsersRoute } from './routes/authLogic.js'
 
 const app = express()
 const PORT = 8000
+dotenv.config()
 
-const password = '7WGL18KPnEIRsEUt'
-
+// const password = '7WGL18KPnEIRsEUt'
+const password = process.env.PASSWORD
 app.use(express.json())
-app.use(cors())
-app.use(cors({ origin: '*' }))
+// app.use(cors())
+app.use(
+  cors({
+    origin: true,
+    methods: 'GET, POST, PATCH, DELETE, PUT',
+    allowedHeaders: 'Content-Type, Authorization',
+  })
+)
 
 app.use('/products', ProductsRoute)
 app.use('/reviews', ReviewRoute)
