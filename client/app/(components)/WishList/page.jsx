@@ -13,12 +13,16 @@ const WishList = () => {
     setStoredToken(localStorage.getItem('token'))
   }, [storedToken])
 
-  //
   const removeProductFromWishList = (productId) => {
-    const updatedProducts = wishproduct.filter(
+    let wishProducts = JSON.parse(localStorage.getItem('wishProducts'))
+
+    let updatedProducts = wishProducts.filter(
       (item) => item && item._id !== productId
     )
-    return setWishProduct(updatedProducts)
+
+    setWishProduct(updatedProducts)
+
+    return localStorage.setItem('wishProducts', JSON.stringify(updatedProducts))
   }
 
   //
@@ -48,6 +52,8 @@ const WishList = () => {
     axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
   }
 
+  let allWishProducts = JSON.parse(localStorage.getItem('wishProducts'))
+
   return (
     <div className='wish-list-parent'>
       <h1 className='wish-list-header'>My WishList</h1>
@@ -60,8 +66,8 @@ const WishList = () => {
         </div>
         <hr className='idk' />
 
-        {wishproduct && wishproduct.length > 0
-          ? wishproduct.map((item) =>
+        {allWishProducts && allWishProducts.length > 0
+          ? allWishProducts.map((item) =>
               item !== undefined ? (
                 <div className='wish-list-product-main' key={item._id}>
                   <div className='wish-list-product'>

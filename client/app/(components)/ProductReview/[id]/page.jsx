@@ -63,12 +63,10 @@ const page = ({ params }) => {
         rating,
       })
 
-      alert('The review is posting right now')
+      alert(response.data.message)
+      window.location.href = `/ProductReview/${id}`
     } catch (error) {
-      alert(
-        'Please make sure that you have an account and you are logged in before you try to post a review'
-      )
-      window.location = 'http://localhost:3000/Auth/LogIn'
+      alert(error.response.data.message)
     }
   }
 

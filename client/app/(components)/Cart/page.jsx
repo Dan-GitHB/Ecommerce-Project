@@ -50,6 +50,8 @@ const Page = () => {
             : produsulCurent
         )
       )
+
+      localStorage.setItem('cartProducts', JSON.stringify(cartProducts))
     } catch (error) {
       console.log(error)
     }
@@ -65,7 +67,7 @@ const Page = () => {
         }
       )
 
-      setCartProducts((produseleAnterioare) =>
+      let test = setCartProducts((produseleAnterioare) =>
         produseleAnterioare.map((produsulCurent) =>
           produsulCurent._id === productId
             ? {
@@ -76,6 +78,8 @@ const Page = () => {
             : produsulCurent
         )
       )
+
+      console.log(products)
     } catch (error) {
       console.log(error)
     }
@@ -122,6 +126,13 @@ const Page = () => {
     axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
   }
 
+  if (cartProducts.length > 0) {
+    localStorage.setItem('cartProducts', JSON.stringify(cartProducts))
+  }
+
+  let allCartProducts = JSON.parse(localStorage.getItem('cartProducts'))
+  console.log(allCartProducts)
+
   return (
     <>
       <h1 className='cart-header'>Your Cart Items</h1>
@@ -132,44 +143,46 @@ const Page = () => {
             <p onClick={deleteAllCartProducts}>Remove all</p>
           </section>
 
-          {cartProducts.map((product) => (
-            <div className='cart-product' key={product._id}>
-              <div className='product-cart'>
-                <section className='product-image'>
-                  <img src={product.image} alt={product.title} />
-                </section>
+          {cartProducts && cartProducts.length > 0
+            ? cartProducts.map((product) => (
+                <div className='cart-product' key={product._id}>
+                  <div className='product-cart'>
+                    <section className='product-image'>
+                      <img src={product.image} alt={product.title} />
+                    </section>
 
-                <section className='product-title'>
-                  <p>{product.title}</p>
-                </section>
+                    <section className='product-title'>
+                      <p>{product.title}</p>
+                    </section>
 
-                <section className='product-pieces'>
-                  <button
-                    onClick={() => {
-                      deleteProductPieces(product._id)
-                    }}
-                  >
-                    -
-                  </button>
-                  <p>{product.pieces}</p>
-                  <button
-                    onClick={() => {
-                      addProductPieces(product._id)
-                    }}
-                  >
-                    +
-                  </button>
-                </section>
+                    <section className='product-pieces'>
+                      <button
+                        onClick={() => {
+                          deleteProductPieces(product._id)
+                        }}
+                      >
+                        -
+                      </button>
+                      <p>{product.pieces}</p>
+                      <button
+                        onClick={() => {
+                          addProductPieces(product._id)
+                        }}
+                      >
+                        +
+                      </button>
+                    </section>
 
-                <section className='product-price'>
-                  <strong>${product.price * product.pieces} </strong>
-                  <p onClick={() => deleteOneCartProduct(product._id)}>
-                    remove
-                  </p>
-                </section>
-              </div>
-            </div>
-          ))}
+                    <section className='product-price'>
+                      <strong>${product.price * product.pieces} </strong>
+                      <p onClick={() => deleteOneCartProduct(product._id)}>
+                        remove
+                      </p>
+                    </section>
+                  </div>
+                </div>
+              ))
+            : null}
 
           <hr />
 

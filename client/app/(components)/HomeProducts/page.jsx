@@ -53,6 +53,7 @@ const HomeProducts = () => {
       }
 
       setWishProduct((prevProducts) => [...prevProducts, data])
+      localStorage.setItem('wishProducts', JSON.stringify(wishproduct))
     } catch (error) {
       alert('Something went wrong. Make sure you are logged in')
     }
@@ -76,6 +77,14 @@ const HomeProducts = () => {
       alert('Something went wrong. Make sure you are logged in!')
     }
   }
+
+  if (wishproduct.length > 0) {
+    localStorage.setItem('wishProducts', JSON.stringify(wishproduct))
+  }
+
+  // if (cartProducts.length > 0) {
+  //   localStorage.setItem('cartProducts', JSON.stringify(cartProducts))
+  // }
 
   if (storedToken) {
     axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
