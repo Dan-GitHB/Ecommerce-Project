@@ -26,10 +26,16 @@ router.post('/:id', verifyToken, async (req, res) => {
   const id = req.params.id
   const productt = await AllProducts.findById(id)
 
+  const { title, content, rating } = req.body
+
+  if (title === '' || content === '' || rating < 1) {
+    return res.status(500).json({ message: 'All the fields are required' })
+  }
+
   const newReview = new AllReviews({
-    title: req.body.title,
-    content: req.body.content,
-    rating: req.body.rating,
+    title,
+    content,
+    rating,
     product: productt._id,
   })
 
@@ -37,7 +43,7 @@ router.post('/:id', verifyToken, async (req, res) => {
     await newReview.save()
 
     res.status(201).json({
-      message: 'Review creat cu success',
+      message: 'The review was created successfully',
       data: newReview,
     })
   } catch (error) {

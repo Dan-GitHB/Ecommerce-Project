@@ -123,7 +123,7 @@ export function verifyToken(req, res, next) {
   console.log(token)
   if (!token) {
     return res.status(401).json({
-      message: 'A problem occur. Make sure you are login into your account',
+      message: 'A problem occur. Make sure you are logged into your account',
     })
   }
 
