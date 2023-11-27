@@ -2,9 +2,37 @@ import express, { json } from 'express'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import passport from 'passport'
+import { default as GoogleStrategy } from 'passport-google-oauth20'
+
 import { Users } from '../models/User.js'
 
 const router = express.Router()
+
+export function verifyToken(req, res, next) {
+  let token = ''
+  if (req.headers.authorization) {
+    token = req.headers.authorization.split(' ')[1]
+  }
+  let secretKey = 'AiciDauUnNumeDeSecretKeyCareEsteDoarUnTestAcum'
+
+  console.log(token)
+  if (!token) {
+    return res.status(401).json({
+      message: 'A problem occur. Make sure you are logged into your account',
+    })
+  }
+
+  try {
+    const decodedToken = jwt.verify(token, secretKey)
+    req.decodedToken = decodedToken
+
+    next()
+  } catch (error) {
+    console.error(error)
+    res.status(401).json({ message: 'Invalid or expired token' })
+  }
+}
 
 router.post('/signup', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body
@@ -113,29 +141,49 @@ router.post('/login', async (req, res) => {
   }
 })
 
-export function verifyToken(req, res, next) {
-  let token = ''
-  if (req.headers.authorization) {
-    token = req.headers.authorization.split(' ')[1]
-  }
-  let secretKey = 'AiciDauUnNumeDeSecretKeyCareEsteDoarUnTestAcum'
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID:
+        '353905428359-fqpbstf5rmho7me70ne0urh8orpldhhd.apps.googleusercontent.com',
+      clientSecret: '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',
+      callbackURL: 'http://localhost:3000/',
 
-  console.log(token)
-  if (!token) {
-    return res.status(401).json({
-      message: 'A problem occur. Make sure you are logged into your account',
-    })
-  }
+      scope: ['profile'],
+    },
+    async function verify(accessToken, refreshToken, profile, cb) {
+      try {
+        let user = await Users.findOne({ googleId: profile.id })
 
-  try {
-    const decodedToken = jwt.verify(token, secretKey)
-    req.decodedToken = decodedToken
+        if (!user) {
+          // Dacă utilizatorul nu există, creează-l
+          user = new Users({
+            name: profile.displayName,
+            googleId: profile.id,
+          })
+          await user.save()
+        }
 
-    next()
-  } catch (error) {
-    console.error(error)
-    res.status(401).json({ message: 'Invalid or expired token' })
-  }
-}
+        return cb(null, user)
+      } catch (error) {
+        return cb(error, null)
+      }
+    }
+  )
+)
+
+// router.get('/login/google', passport.authenticate('google'))
+router.get(
+  '/login/google',
+  passport.authenticate('google', { scope: ['profile'] })
+)
+
+router.get(
+  '/oauth2/redirect/google',
+  passport.authenticate('google', {
+    successRedirect: 'http://localhost:3000/',
+    failureRedirect: 'http://localhost:3000/cancel',
+  })
+)
 
 export { router as UsersRoute }

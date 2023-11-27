@@ -15,6 +15,8 @@ const password = '7WGL18KPnEIRsEUt'
 
 app.use(express.json())
 app.use(cors())
+app.use(cors({ origin: '*' }))
+
 app.use('/products', ProductsRoute)
 app.use('/reviews', ReviewRoute)
 app.use('/wishlist', WishListRoute)
