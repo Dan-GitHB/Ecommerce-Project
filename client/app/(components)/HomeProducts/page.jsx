@@ -49,6 +49,7 @@ const HomeProducts = () => {
 
           return product
         })
+
         setProducts(updateProducts)
       }
 
@@ -71,7 +72,14 @@ const HomeProducts = () => {
 
       const data = response.data.product[0]
 
-      setCartProducts((prevCartProducts) => [...prevCartProducts, data])
+      const currentCartProducts =
+        JSON.parse(localStorage.getItem('cartProducts')) || []
+
+      const updatedCartProducts = [...currentCartProducts, data]
+
+      localStorage.setItem('cartProducts', JSON.stringify(updatedCartProducts))
+
+      setCartProducts(JSON.parse(localStorage.getItem('cartProducts')))
     } catch (error) {
       console.log(error)
       alert('Something went wrong. Make sure you are logged in!')
@@ -81,10 +89,6 @@ const HomeProducts = () => {
   if (wishproduct.length > 0) {
     localStorage.setItem('wishProducts', JSON.stringify(wishproduct))
   }
-
-  // if (cartProducts.length > 0) {
-  //   localStorage.setItem('cartProducts', JSON.stringify(cartProducts))
-  // }
 
   if (storedToken) {
     axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`

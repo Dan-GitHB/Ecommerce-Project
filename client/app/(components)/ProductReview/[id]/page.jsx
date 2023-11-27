@@ -82,7 +82,14 @@ const page = ({ params }) => {
 
       const data = response.data.product[0]
 
-      setCartProducts((prevCartProducts) => [...prevCartProducts, data])
+      const currentCartProducts =
+        JSON.parse(localStorage.getItem('cartProducts')) || []
+
+      const updatedCartProducts = [...currentCartProducts, data]
+
+      localStorage.setItem('cartProducts', JSON.stringify(updatedCartProducts))
+
+      setCartProducts(JSON.parse(localStorage.getItem('cartProducts')))
     } catch (error) {
       console.log(error)
       alert('Something went wrong. Make sure you are logged in!')

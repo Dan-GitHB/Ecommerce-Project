@@ -29,6 +29,7 @@ const Page = () => {
   }, [storedToken])
 
   // Adaugam noi bucati pentru un produs
+
   const addProductPieces = async (productId) => {
     try {
       const response = await axios.patch(
@@ -38,20 +39,20 @@ const Page = () => {
         }
       )
 
-      setCartProducts((produseleAnterioare) =>
-        produseleAnterioare.map((produsulCurent) =>
-          produsulCurent._id === productId
-            ? {
-                ...produsulCurent,
+      const currentCartProducts =
+        JSON.parse(localStorage.getItem('cartProducts')) || []
 
-                // pieces: response.data.product.pieces,
-                pieces: produsulCurent.pieces + 1,
-              }
-            : produsulCurent
-        )
+      const updatedCartProducts = currentCartProducts.map((produsulCurent) =>
+        produsulCurent._id === productId
+          ? { ...produsulCurent, pieces: produsulCurent.pieces + 1 }
+          : produsulCurent
       )
 
-      localStorage.setItem('cartProducts', JSON.stringify(cartProducts))
+      // Actualizează local storage cu noul array
+      localStorage.setItem('cartProducts', JSON.stringify(updatedCartProducts))
+
+      // Actualizează state-ul cu noul array
+      setCartProducts(updatedCartProducts)
     } catch (error) {
       console.log(error)
     }
@@ -67,19 +68,18 @@ const Page = () => {
         }
       )
 
-      let test = setCartProducts((produseleAnterioare) =>
-        produseleAnterioare.map((produsulCurent) =>
-          produsulCurent._id === productId
-            ? {
-                ...produsulCurent,
-                // pieces: response.data.product.pieces,
-                pieces: produsulCurent.pieces - 1,
-              }
-            : produsulCurent
-        )
+      const currentCartProducts =
+        JSON.parse(localStorage.getItem('cartProducts')) || []
+
+      const updatedCartProducts = currentCartProducts.map((produsulCurent) =>
+        produsulCurent._id === productId
+          ? { ...produsulCurent, pieces: produsulCurent.pieces - 1 }
+          : produsulCurent
       )
 
-      console.log(products)
+      localStorage.setItem('cartProducts', JSON.stringify(updatedCartProducts))
+
+      setCartProducts(updatedCartProducts)
     } catch (error) {
       console.log(error)
     }
@@ -88,15 +88,24 @@ const Page = () => {
   // Stergem un product din cart Products:
 
   const deleteOneCartProduct = (productId) => {
-    setCartProducts((produseleAnterioare) =>
-      produseleAnterioare.filter(
-        (produsulCurent) => produsulCurent._id !== productId
-      )
+    const currentCartProducts = JSON.parse(
+      localStorage.getItem('cartProducts') || []
     )
+
+    const updatedCartProducts = currentCartProducts.filter(
+      (currentProduct) => currentProduct._id !== productId
+    )
+
+    localStorage.setItem('cartProducts', JSON.stringify(updatedCartProducts))
+    setCartProducts(updatedCartProducts)
   }
   // Stergem toate produsele din cart Products:
 
   const deleteAllCartProducts = () => {
+    const emtpyArray = []
+
+    localStorage.setItem('cartProducts', JSON.stringify(emtpyArray))
+
     setCartProducts([])
   }
 
@@ -117,6 +126,10 @@ const Page = () => {
       )
 
       window.location = response.data.url
+
+      const emtpyArray = []
+      localStorage.setItem('cartProducts', JSON.stringify(emtpyArray))
+      setCartProducts([])
     } catch (error) {
       console.log(error)
     }
@@ -125,13 +138,6 @@ const Page = () => {
   if (storedToken) {
     axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
   }
-
-  if (cartProducts.length > 0) {
-    localStorage.setItem('cartProducts', JSON.stringify(cartProducts))
-  }
-
-  let allCartProducts = JSON.parse(localStorage.getItem('cartProducts'))
-  console.log(allCartProducts)
 
   return (
     <>
@@ -190,7 +196,7 @@ const Page = () => {
             <div className='sub-total-info'>
               <h1>Sub Total</h1>
               <section className='total-items'>
-                <p>{cartProducts.length} items</p>
+                <p>{cartProducts && cartProducts.length} items</p>
                 <strong className='total price'>
                   ${totalPrice.toFixed(2)}
                 </strong>

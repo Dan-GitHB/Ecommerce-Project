@@ -65,7 +65,10 @@ const NavBar = () => {
       <div className='auth-components'>
         {existUser ? (
           <ul>
-            <li>{userName}</li>
+            <li>
+              {userName.includes(' ') ? userName.split(' ')[0] : userName}
+            </li>
+
             <li
               className='img-user'
               onMouseOver={handleMouseOver}

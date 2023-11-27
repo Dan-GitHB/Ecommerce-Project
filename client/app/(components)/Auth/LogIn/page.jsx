@@ -56,6 +56,18 @@ const LogIn = () => {
     }
   }
 
+  const logInWithGoogleAccount = async () => {
+    try {
+      const response = await axios.get(
+        'http://localhost:8000/auth/login/google'
+      )
+      // Redirect către URL-ul primit de la server, unde va avea loc autentificarea cu Google
+      window.location.href = res.redirect
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   if (storedToken) {
     axios.defaults.headers.post['Authorization'] = `Bearer ${storedToken}`
   }
@@ -114,6 +126,12 @@ const LogIn = () => {
             </a>
           </p>
         </form>
+
+        <div className='google-implementation'>
+          <a className='btn-log-in' onClick={logInWithGoogleAccount}>
+            Sign in With Google
+          </a>
+        </div>
       </div>
     </div>
   )

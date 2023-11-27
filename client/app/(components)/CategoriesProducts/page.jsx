@@ -1,10 +1,13 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { getAllProducts } from '@/app/actions/getAllProductsFunc'
+import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import Style from '../../../styles/Categories.css'
+import { getAllProducts } from '@/app/actions/getAllProductsFunc'
+import { PropsContext } from '@/app/actions/consumProps'
 
 const page = () => {
+  const { cartProducts, setCartProducts } = useContext(PropsContext) // Produsele ce le adaugam in Cart Page
+
   const [prods, setProds] = useState([])
   const [type, setTye] = useState('')
   const [price, setPrice] = useState(-1)
@@ -54,6 +57,31 @@ const page = () => {
   const handlePriceChange = (event) => {
     const selectPrice = event.target.value
     setPrice(Number(selectPrice))
+  }
+
+  const addProductsToCart = async (selectedProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/products`,
+
+        {
+          nameProduct: selectedProduct.title,
+        }
+      )
+
+      const data = response.data.product[0]
+      const currentCartProducts =
+        JSON.parse(localStorage.getItem('cartProducts')) || []
+
+      const updatedCartProducts = [...currentCartProducts, data]
+
+      localStorage.setItem('cartProducts', JSON.stringify(updatedCartProducts))
+
+      setCartProducts(JSON.parse(localStorage.getItem('cartProducts')))
+    } catch (error) {
+      console.log(error)
+      alert('Something went wrong. Make sure you are logged in!')
+    }
   }
 
   return (
@@ -122,7 +150,12 @@ const page = () => {
 
               <div className='price-buy'>
                 <strong className='price'>${product.price}</strong>
-                <button className='add-to-cart'>Add to Cart</button>
+                <button
+                  className='add-to-cart'
+                  onClick={() => addProductsToCart(product)}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           )
