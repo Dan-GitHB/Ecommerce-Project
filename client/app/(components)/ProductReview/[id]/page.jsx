@@ -13,6 +13,7 @@ const page = ({ params }) => {
   const [reviews, setReviews] = useState([])
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [nameUser, setNameUser] = useState('')
   const [rating, setRating] = useState(0)
 
   const [storedToken, setStoredToken] = useState('')
@@ -54,6 +55,11 @@ const page = ({ params }) => {
     setContent(event.target.value)
   }
 
+  const nameValue = () => {
+    event.preventDefault()
+    setNameUser(event.target.value)
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
@@ -61,6 +67,7 @@ const page = ({ params }) => {
         title,
         content,
         rating,
+        nameUser,
       })
 
       alert(response.data.message)
@@ -146,6 +153,7 @@ const page = ({ params }) => {
                   )
                 })}
               </span>
+
               <input
                 type='text'
                 name='title'
@@ -161,6 +169,14 @@ const page = ({ params }) => {
                 placeholder='Was it good? Pros? Cons?'
                 className='review-text'
                 onChange={contentValue}
+              />
+
+              <input
+                type='text'
+                name='nameUser'
+                placeholder='Name of user who is posting this review'
+                className='title-review'
+                onChange={nameValue}
               />
 
               <button type='submit' className='create-new-review'>
@@ -188,7 +204,12 @@ const page = ({ params }) => {
                     })}
                   </span>
 
-                  {/* <span className='date-review'>2023-04-06:19:28:01</span> */}
+                  <span className='date-review'>
+                    Written by:{' '}
+                    {review.nameUser.includes(' ')
+                      ? review.nameUser.split(' ')[0]
+                      : review.nameUser}
+                  </span>
                 </div>
 
                 <div className='review-content'>

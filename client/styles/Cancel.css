@@ -1,0 +1,8 @@
+.header-error {
+  color: red;
+  font-weight: 700;
+  height: 250px;
+  font-size: 50px;
+  text-align: center;
+  margin-top: 20%;
+}

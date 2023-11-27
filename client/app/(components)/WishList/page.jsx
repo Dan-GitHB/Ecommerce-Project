@@ -93,7 +93,7 @@ const WishList = () => {
                       <p>In Stock</p>
                     </div>
                     <div className='wish-list-addtocart'>
-                      <p>Added on: {item._id}</p>
+                      {/* <p>Added on: {item._id}</p> */}
                       <button onClick={() => addProductsToCart(item)}>
                         Add to Cart
                       </button>

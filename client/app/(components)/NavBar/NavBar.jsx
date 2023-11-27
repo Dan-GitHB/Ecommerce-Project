@@ -2,16 +2,23 @@
 import { useState, useContext, useEffect } from 'react'
 import Style from './NavBar.css'
 import ecommerceLogo from '../../../public/images/logo-ecommerce.png'
-
+import { PropsContext } from '@/app/actions/consumProps'
 import Link from 'next/link'
 
 const NavBar = () => {
   const [existUser, setExistUser] = useState([])
   const [userName, setUserName] = useState('')
 
+  const { wishproduct, setWishProduct } = useContext(PropsContext) //Produsele ce le adaugam in Wish List
+  const { cartProducts, setCartProducts } = useContext(PropsContext) // Produsele ce le adaugam in Cart Page
+
   useEffect(() => {
     setExistUser(localStorage.getItem('userAccount'))
-    setUserName(JSON.parse(localStorage.getItem('userAccount'))?.name || '')
+    setUserName(
+      JSON.parse(localStorage.getItem('userAccount'))?.name ||
+        JSON.parse(localStorage.getItem('userAccount')) ||
+        ''
+    )
   }, [existUser])
 
   const [showMenu, setShowMenu] = useState(false)
@@ -27,6 +34,8 @@ const NavBar = () => {
   const logOutUser = () => {
     localStorage.removeItem('userAccount')
     localStorage.removeItem('token')
+    localStorage.removeItem('cartProducts')
+    localStorage.removeItem('wishProducts')
 
     window.location.href = '/'
   }

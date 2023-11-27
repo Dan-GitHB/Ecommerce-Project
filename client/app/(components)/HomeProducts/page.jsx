@@ -60,6 +60,9 @@ const HomeProducts = () => {
     }
   }
 
+  console.log(cartProducts)
+  console.log(wishproduct)
+
   const addProductsToCart = async (selectedProduct) => {
     try {
       const response = await axios.post(

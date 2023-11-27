@@ -31,12 +31,7 @@ const LogIn = () => {
       const giveData = { email, password }
       const response = await axios.post(
         'http://localhost:8000/auth/login',
-        giveData,
-        {
-          headers: {
-            Authorization: 'Bearer   ',
-          },
-        }
+        giveData
       )
 
       localStorage.setItem('userAccount', JSON.stringify(response.data.user))
@@ -56,16 +51,12 @@ const LogIn = () => {
     }
   }
 
-  const logInWithGoogleAccount = async () => {
-    try {
-      const response = await axios.get(
-        'http://localhost:8000/auth/login/google'
-      )
-      // Redirect către URL-ul primit de la server, unde va avea loc autentificarea cu Google
-      window.location.href = res.redirect
-    } catch (error) {
-      console.error(error)
-    }
+  const logInWithGoogleAccount = () => {
+    localStorage.setItem('userAccount', JSON.stringify('User'))
+    localStorage.setItem('token', JSON.stringify('userToken'))
+
+    window.location.href = 'http://localhost:8000/auth/login/google'
+    return false
   }
 
   if (storedToken) {
@@ -87,50 +78,53 @@ const LogIn = () => {
           </div>
         )}
 
-        <form
-          className='form-log-in'
-          onSubmit={() => {
-            submitForm()
-          }}
-        >
-          <h3 className='header-content'>LogIn</h3>
+        <div className='form-logic'>
+          <form
+            className='form-log-in'
+            onSubmit={() => {
+              submitForm()
+            }}
+          >
+            <h3 className='header-content'>LogIn</h3>
 
-          <input
-            type='email'
-            className='content-log-in '
-            name='email'
-            id='email'
-            placeholder='Email'
-            value={email}
-            onChange={handleEmail}
-          />
+            <input
+              type='email'
+              className='content-log-in '
+              name='email'
+              id='email'
+              placeholder='Email'
+              value={email}
+              onChange={handleEmail}
+            />
 
-          <input
-            type='password'
-            className='content-log-in'
-            name='password'
-            id='password'
-            placeholder='Password'
-            value={password}
-            onChange={handlePassword}
-          />
+            <input
+              type='password'
+              className='content-log-in'
+              name='password'
+              id='password'
+              placeholder='Password'
+              value={password}
+              onChange={handlePassword}
+            />
 
-          <button className='btn-log-in' type='submit'>
-            LogIn
-          </button>
+            <button className='btn-log-in' type='submit'>
+              LogIn
+            </button>
 
-          <p className='have-an-account'>
-            Not a member?
-            <a href='SignUp' style={{ color: 'red', fontWeight: 400 }}>
-              Sign Up Now
+            <p className='have-an-account'>
+              Not a member?
+              <a href='SignUp' style={{ color: 'red', fontWeight: 400 }}>
+                Sign Up Now
+              </a>
+            </p>
+
+            <a className='btn-google' onClick={logInWithGoogleAccount}>
+              <img
+                src='https://www.drupal.org/files/issues/2020-01-26/google_logo.png'
+                className='sign-with-google'
+              />
             </a>
-          </p>
-        </form>
-
-        <div className='google-implementation'>
-          <a className='btn-log-in' onClick={logInWithGoogleAccount}>
-            Sign in With Google
-          </a>
+          </form>
         </div>
       </div>
     </div>

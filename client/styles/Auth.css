@@ -71,6 +71,8 @@
   height: 110vh;
 }
 
+.form-logic {
+}
 .form-log-in {
   background-image: linear-gradient(
     to right,
@@ -144,4 +146,12 @@ input {
 
 input::placeholder {
   color: black;
+}
+
+.btn-google {
+  cursor: pointer;
+  border-radius: 50px;
+}
+.sign-with-google {
+  width: 240px;
 }
