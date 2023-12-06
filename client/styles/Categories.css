@@ -102,3 +102,9 @@
   padding: 0.7rem 1.5rem;
   border-radius: 10px;
 }
+
+.filter-info {
+  font-weight: 700;
+  font-size: 35px;
+  width: 800px;
+}

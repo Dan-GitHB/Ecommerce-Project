@@ -6,80 +6,66 @@ const router = express.Router()
 
 router.get(`/`, async (req, res) => {
   const { typeProduct, price } = req.query
-  const filter = {}
-  let products = []
+
+  // let allProducts = await AllProducts.find({})
+  // res.json({ data: allProducts })
+
   try {
-    if (typeProduct !== '') {
-      filter.typeProduct = typeProduct
-      products = await AllProducts.find({
-        typeProduct: filter.typeProduct,
-      })
+    let allProducts = (await AllProducts.find({})) || []
+    let filteredProducts =
+      (await AllProducts.find({ typeProduct: typeProduct })) || []
+
+    if (price > 0 && price < 1000) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price < 1000
+      )
+
+      console.log(filteredProducts)
     }
 
-    if (price > 0) {
-      if (price < 1000) {
-        products = await AllProducts.find({ price: { $lt: 1000 } })
-      } else if (price > 1000 && price < 1500) {
-        products = await AllProducts.find({ price: { $gt: 1000 } })
-      } else if (price > 1500) {
-        products = await AllProducts.find({ price: { $gt: 1500 } })
-      }
+    if (price > 0 && price >= 1000 && price < 1500) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price >= 1000 && product.price < 1500
+      )
+    }
+
+    if (price > 0 && price >= 1500) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price >= 1500
+      )
+
+      console.log(filteredProducts)
     }
 
     if (typeProduct !== '' && price > 0) {
-      filter.typeProduct = typeProduct
+      const currentTypeProducts = filteredProducts.filter(
+        (product) => product.typeOfProduct == typeProduct
+      )
 
-      if (price < 1000) {
-        products = await AllProducts.find({
-          typeProduct: filter.typeProduct,
-          price: { $lt: 1000 },
-        })
-      }
+      console.log(currentTypeProducts)
+    }
 
-      if (price > 1000 && price < 1500) {
-        products = await AllProducts.find({
-          typeProduct: filter.typeProduct,
-          price: { $gt: 1000 },
-        })
-      }
+    if (typeProduct === 'all-products' && price < 1000) {
+      filteredProducts = allProducts.filter((product) => product.price < 1000)
 
-      if (price > 1500) {
-        products = await AllProducts.find({
-          typeProduct: filter.typeProduct,
-          price: { $gt: 1500 },
-        })
-      }
+      console.log(filteredProducts)
+    }
 
-      if (filter.typeProduct === 'all-products' && price < 1000) {
-        products = await AllProducts.find({
-          price: { $lt: 1000 },
-        })
-      }
+    if (typeProduct === 'all-products' && price > 1000 && price < 1500) {
+      filteredProducts = allProducts.filter((product) => product.price > 1000)
+    }
 
-      if (
-        filter.typeProduct === 'all-products' &&
-        price > 1000 &&
-        price < 1500
-      ) {
-        products = await AllProducts.find({
-          price: { $gt: 1000 },
-        })
-      }
+    if (typeProduct === 'all-products' && price > 1500) {
+      filteredProducts = allProducts.filter((product) => product.price > 1500)
+    }
 
-      if (filter.typeProduct === 'all-products' && price > 1500) {
-        products = await AllProducts.find({
-          price: { $gt: 1500 },
-        })
-      }
-
-      if (filter.typeProduct === 'all-products' && price === NaN) {
-        products = await AllProducts.find({})
-      }
+    if (typeProduct === 'all-products' && isNaN(price)) {
+      filteredProducts = allProducts
     }
 
     res.json({
       status: 'success',
-      data: products,
+      data: filteredProducts,
     })
   } catch (error) {
     console.log(error)

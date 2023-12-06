@@ -13,17 +13,29 @@ const page = () => {
   const [price, setPrice] = useState(-1)
 
   useEffect(() => {
+    const allProducts = async () => {
+      const response = await axios.get('http://localhost:8000/products')
+
+      setProds(response.data.data)
+    }
+    allProducts()
+  }, [])
+
+  useEffect(() => {
     const getProducts = async () => {
       try {
-        let produsele = await getAllProducts()
-        setProds(produsele)
-
         if (type.length > 0) {
           const response = await axios.get(
             `http://localhost:8000/filtering?typeProduct=${type}&price=${price}`
           )
 
+          // const productsToFilter = response.data.data
+          // const filterProducts = await productsToFilter.filter(
+          //   (prod) => prod.typeProduct === type
+          // )
+
           setProds(response.data.data)
+          console.log(prods)
         }
 
         if (type === 'all-products') {
@@ -137,29 +149,36 @@ const page = () => {
       </div>
 
       <div className='products-parent'>
-        {prods.map((product) => {
-          return (
-            <div className='product' key={product._id}>
-              <div className='bg-image-products-category'>
-                <div className='image'>
-                  <img src={product.image} className='image-product' />
+        {prods.length > 0 ? (
+          prods.map((product) => {
+            return (
+              <div className='product' key={product._id}>
+                <div className='bg-image-products-category'>
+                  <div className='image'>
+                    <img src={product.image} className='image-product' />
+                  </div>
+                </div>
+
+                <h4 className='name-product'>{product.title}</h4>
+
+                <div className='price-buy'>
+                  <strong className='price'>${product.price}</strong>
+                  <button
+                    className='add-to-cart'
+                    onClick={() => addProductsToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
-
-              <h4 className='name-product'>{product.title}</h4>
-
-              <div className='price-buy'>
-                <strong className='price'>${product.price}</strong>
-                <button
-                  className='add-to-cart'
-                  onClick={() => addProductsToCart(product)}
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          )
-        })}
+            )
+          })
+        ) : (
+          <h1 className='filter-info'>
+            Dont exist yet products on this specific filter. You can change the
+            price maybe
+          </h1>
+        )}
       </div>
     </div>
   )
